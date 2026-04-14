@@ -1,0 +1,281 @@
+#include "../include/tcp_server.h"
+#include "../include/threadpool.h"
+#include <sys/epoll.h>
+#include <fcntl.h>
+#include <algorithm>
+#include "../include/semaphore.h"
+
+namespace flz {
+	
+	static int constexpr OUTCACHE = 4096;
+	static int constexpr OUTCACHEPORT = 16;
+
+	flz::Mutex m_closeMtx;
+	std::vector<int> m_closePending;
+
+
+	void TcpServer::flushOutBuf(connPtr conn){
+		if(conn->outBuf.empty())return;
+		ssize_t n = ::write(conn->fd,conn->outBuf.data(),conn->outBuf.size());
+		if(n>0)conn->outBuf.erase(0,n);
+	}
+
+
+	TcpServer::TcpServer(uint16_t port,func_t handler,ServerType type):_listen_port(port),_data_handler(handler),m_type(type){
+	}
+
+	TcpServer::~TcpServer(){
+		if(_listen_fd != -1){
+			close(_listen_fd);
+			std::cout<<"socket close\n";
+		}
+
+	}
+
+	bool TcpServer::init(){
+		//8+4*(core_num-1)
+		m_threadpool = std::make_shared<ThreadPool>(4);
+		if(!m_threadpool->init()){
+			perror("threadpool init fail!");
+			return false;
+		}
+
+		_listen_fd = socket(AF_INET,SOCK_STREAM,0);
+		
+		int opt = 1;
+		if(setsockopt(_listen_fd,SOL_SOCKET,SO_REUSEADDR,&opt,sizeof(opt))){
+			perror("setsockopt S0_REUSEADDR fail");
+			return false;
+		}
+		if(setsockopt(_listen_fd,SOL_SOCKET,SO_REUSEPORT,&opt,sizeof(opt))){
+			perror("setsockopt SO_REUSEPORT fail");
+			return false;
+		}
+
+		if(_listen_fd == -1){
+			perror("socket init fail\n");
+			return false;
+		}
+		fcntl(_listen_fd,F_SETFL,fcntl(_listen_fd,F_GETFL)|O_NONBLOCK);
+		struct sockaddr_in server_addr;
+		std::memset(&server_addr,0,sizeof(server_addr));
+		server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+		server_addr.sin_family = AF_INET;
+		server_addr.sin_port = htons(_listen_port);
+
+		int bind_ret = bind(_listen_fd,(struct sockaddr*)&server_addr,sizeof(server_addr));
+		if(bind_ret == -1){
+			perror("bind fail");
+			close(_listen_fd);
+			_listen_fd = -1;
+			return false;
+		}
+		std::cout<<"bind success!\n";
+		int listen_ret = listen(_listen_fd,4096);
+		if(listen_ret==-1){
+			perror("listen fail!\n");
+			_listen_fd = -1;
+			return false;
+		}
+		
+		m_epfd = epoll_create1(EPOLL_CLOEXEC);
+		struct epoll_event ev{};
+		ev.events = EPOLLIN|EPOLLET;
+		ev.data.fd = _listen_fd;
+		if(epoll_ctl(m_epfd,EPOLL_CTL_ADD,_listen_fd,&ev)){
+			perror("epoll_ctl fail!");
+			return false;
+		}
+		
+		std::cout<<"listening,wait connect...\n";
+		_is_running = true;
+		
+		
+
+
+		return true;
+	}
+
+	void TcpServer::start(){
+		if(!_is_running&&_listen_fd == -1){
+			perror("socket is not init");
+			return;
+		}
+		while(_is_running){
+			struct epoll_event events[512];
+			int nf = epoll_wait(m_epfd,events,512,100);
+			if(nf == -1){
+				perror("epoll_wait fail!");
+				break;
+			}
+			for(int i = 0;i<nf;i++){
+				int fd = events[i].data.fd;
+				uint32_t revents = events[i].events;
+				if(fd == _listen_fd){
+					while(_is_running){
+						struct sockaddr_in client_addr;
+						socklen_t client_addr_len = sizeof(client_addr);
+						int client_fd = accept4(_listen_fd,(struct sockaddr*)&client_addr,&client_addr_len,SOCK_NONBLOCK|SOCK_CLOEXEC);
+
+						if(client_fd == -1){
+							if(errno == EAGAIN||errno == EWOULDBLOCK)break;
+							else if(errno == EINTR)continue;
+							else
+								perror("accept4 error");
+							break;
+						}
+
+						
+
+						auto conn = std::make_shared<Conn>(client_fd);
+						flz::Mutex::Lock lock(m_closeMtx);
+						m_connMap[client_fd] = conn;
+						lock.unlock();
+						struct epoll_event ev{};
+						ev.events = EPOLLIN|EPOLLET | EPOLLONESHOT|EPOLLRDHUP;
+						ev.data.fd = client_fd;
+						if(epoll_ctl(m_epfd,EPOLL_CTL_ADD,client_fd,&ev)==-1){
+							perror("epoll ctl add conn");
+							removeConn(client_fd);
+							continue;
+						}
+						
+						std::string client_ip = inet_ntoa(client_addr.sin_addr);
+						uint16_t client_port = ntohs(client_addr.sin_port);
+					}
+				}else{
+					auto it = m_connMap.find(fd);
+					if(it == m_connMap.end())continue;
+					connPtr conn = it->second;
+
+					if(revents & (EPOLLHUP|EPOLLERR|EPOLLRDHUP)){
+						flz::Mutex::Lock lock(m_closeMtx);
+						m_closePending.push_back(fd);
+						lock.unlock();
+						continue;
+					}
+
+
+					if(revents & EPOLLIN){
+						handlerRead(conn);
+						//m_threadpool->enqueue([this,conn]{
+						//	this->handlerRead(conn);
+						//});
+					}
+				
+				}
+			}
+			flz::Mutex::Lock lock(m_closeMtx);
+			for(int fd:m_closePending){
+				if(epoll_ctl(m_epfd,EPOLL_CTL_DEL,fd,nullptr)==-1){
+					perror("EPOLL_CTL_DEL fail");
+				}
+				close(fd);
+				m_connMap.erase(fd);
+			}
+			m_closePending.clear();
+			lock.unlock();
+		}	
+		
+	}
+	void TcpServer::handlerRead(connPtr conn){
+		if (!conn || conn->fd < 0) return;
+		{
+        	flz::Mutex::Lock lock(m_closeMtx);
+       		if (m_connMap.find(conn->fd) == m_connMap.end()) {
+        	    return;
+        	}
+    		lock.unlock();
+		}
+		char buf[4096];
+		while(true){
+			ssize_t n = recv(conn->fd,buf,sizeof(buf),0);
+			if(n>0){
+				std::string request = _data_handler(std::string(buf));
+				if(send(conn->fd,request.data(),request.size(),MSG_NOSIGNAL)==-1){
+					if(errno == EPIPE || errno == ECONNRESET){
+						flz::Mutex::Lock lock(m_closeMtx);
+						m_closePending.push_back(conn->fd);
+						lock.unlock();
+						return;
+					}
+					perror("send fail");
+				}
+				if(m_type==ServerType::HTTP){
+					addClosePending(conn);
+					return;
+				}
+				//size_t pos;
+				//conn->inBuf.append(buf,n);
+				//while((pos = conn->inBuf.find('\n')) != std::string::npos){
+				//	std::string msg = conn->inBuf.substr(0,pos+1);
+				//	conn->inBuf.erase(0,pos+1);
+				//	if(send(conn->fd,msg.data(),msg.size(),MSG_NOSIGNAL)==-1){
+				//		if(errno == EPIPE || errno == ECONNRESET){
+				//			flz::Mutex::Lock lock(m_closeMtx);
+				//			m_closePending.push_back(conn->fd);
+				//			lock.unlock();
+				//			return;
+				//		}
+				//		perror("send fail");
+				//	}
+				//}
+			}else if(n==0){
+				{
+					flz::Mutex::Lock lock(m_closeMtx);
+					m_closePending.push_back(conn->fd);
+					lock.unlock();
+				}
+				return;
+			}else{
+				if(errno == EAGAIN || errno == EWOULDBLOCK){
+					struct epoll_event ev{};
+					ev.events = EPOLLIN|EPOLLET | EPOLLONESHOT|EPOLLRDHUP;
+					ev.data.fd = conn->fd;
+					if(epoll_ctl(m_epfd,EPOLL_CTL_MOD,conn->fd,&ev) == -1 && errno != ENOENT){
+						perror("epoll_ctl MOD fail");
+						flz::Mutex::Lock lock(m_closeMtx);
+						m_closePending.push_back(conn->fd);
+						lock.unlock();
+					}					
+					break;
+				}
+				if(errno == EINTR)continue;
+				perror("recv error");
+				{
+					flz::Mutex::Lock lock(m_closeMtx);
+					m_closePending.push_back(conn->fd);
+					lock.unlock();
+				}
+				return;
+			}
+		}
+	}
+	
+	void TcpServer::addClosePending(connPtr conn){
+		flz::Mutex::Lock lock(m_closeMtx);
+		m_closePending.push_back(conn->fd);
+		lock.unlock();
+	}
+ void TcpServer::stop(){
+ 	_is_running = false;
+ 	_listen_fd = -1;
+
+ }
+ void TcpServer::removeConn(int fd) {
+   	if (fd < 0) return;
+	flz::Mutex::Lock lock(m_closeMtx);
+   	epoll_ctl(m_epfd, EPOLL_CTL_DEL, fd, nullptr); 
+   	close(fd);              
+   	m_connMap.erase(fd);
+	lock.unlock();
+ }
+
+ 
+
+
+
+
+
+}
+
