@@ -2,5 +2,6 @@ build/
 *.o
 bin/
 .vscode/
-.Log/
-.test/
+Log/
+test/
+out/
