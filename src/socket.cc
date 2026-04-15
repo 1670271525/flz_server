@@ -10,7 +10,7 @@
 
 namespace flz {
 
-	flz::Logger::ptr g_logger = FLZ_LOG_ROOT();
+	static flz::Logger::ptr g_logger = FLZ_LOG_ROOT();
 
 
 

@@ -5,12 +5,12 @@
 #include <sstream>
 #include "../include/address.h"
 #include "../include/log.h"
-#include "../include/endian.h"
+#include "../include/my_endian.h"
 
 
 namespace flz {
 
-	flz::Logger::ptr g_logger = FLZ_LOG_ROOT();
+	static flz::Logger::ptr g_logger = FLZ_LOG_ROOT();
 	
 	template<class T>
 	static T CreateMask(uint32_t bits){
@@ -94,7 +94,63 @@ namespace flz {
 		return !result.empty();
 	}
 
-	bool Address::GetInterfaceAddress(std::vector<std::pair<Address::ptr,uint32_t>>& result,const std::string& iface,int family){
+	bool Address::GetInterfaceAddresses(std::multimap<std::string
+                    ,std::pair<Address::ptr, uint32_t> >& result,
+                    int family) {
+		struct ifaddrs *next, *results;
+		if(getifaddrs(&results) != 0) {
+			FLZ_LOG_DEBUG(g_logger) << "Address::GetInterfaceAddresses getifaddrs "
+				" err=" << errno << " errstr=" << strerror(errno);
+			return false;
+		}
+
+		try {
+			for(next = results; next; next = next->ifa_next) {
+				Address::ptr addr;
+				uint32_t prefix_len = ~0u;
+				if(family != AF_UNSPEC && family != next->ifa_addr->sa_family) {
+					continue;
+				}
+				switch(next->ifa_addr->sa_family) {
+					case AF_INET:
+						{
+							addr = Create(next->ifa_addr, sizeof(sockaddr_in));
+							uint32_t netmask = ((sockaddr_in*)next->ifa_netmask)->sin_addr.s_addr;
+							prefix_len = CountBytes(netmask);
+						}
+						break;
+					case AF_INET6:
+						{
+							addr = Create(next->ifa_addr, sizeof(sockaddr_in6));
+							in6_addr& netmask = ((sockaddr_in6*)next->ifa_netmask)->sin6_addr;
+							prefix_len = 0;
+							for(int i = 0; i < 16; ++i) {
+								prefix_len += CountBytes(netmask.s6_addr[i]);
+							}
+						}
+						break;
+					default:
+						break;
+				}
+
+				if(addr) {
+					result.insert(std::make_pair(next->ifa_name,
+								std::make_pair(addr, prefix_len)));
+				}
+			}
+		} catch (...) {
+			FLZ_LOG_ERROR(g_logger) << "Address::GetInterfaceAddresses exception";
+			freeifaddrs(results);
+			return false;
+		}
+		freeifaddrs(results);
+		return !result.empty();
+	}
+
+
+
+
+	bool Address::GetInterfaceAddresses(std::vector<std::pair<Address::ptr,uint32_t>>& result,const std::string& iface,int family){
 		if(iface.empty() || iface == "*"){
 			if(family == AF_INET || family == AF_UNSPEC){
 				result.push_back(std::make_pair(Address::ptr(new IPv4Address()),0u));
@@ -106,7 +162,7 @@ namespace flz {
 		}
 
 		std::multimap<std::string,std::pair<Address::ptr,uint32_t>> results;
-		if(!GetInterfaceAddress(results,family)){
+		if(!GetInterfaceAddresses(results,family)){
 			return false;
 		}
 
@@ -230,6 +286,19 @@ namespace flz {
 				);
 		return IPv4Address::ptr(new IPv4Address(baddr));
 	}
+
+	IPAddress::ptr IPv4Address::networdAddress(uint32_t prefix_len) {
+		if(prefix_len > 32) {
+			return nullptr;
+		}
+
+		sockaddr_in baddr(m_addr);
+		baddr.sin_addr.s_addr &= byteswapOnLittleEndian(
+				CreateMask<uint32_t>(prefix_len));
+		return IPv4Address::ptr(new IPv4Address(baddr));
+	}
+
+
 
 	IPAddress::ptr IPv4Address::subnetMask(uint32_t prefix_len){
 		sockaddr_in subnet;

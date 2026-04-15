@@ -34,7 +34,7 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 file(GLOB_RECURSE SRC_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cc")
 
 # 6. 正确收集test目录下所有.cc文件（单独定义变量，避免覆盖）
-file(GLOB_RECURSE TEST_SOURCES "${CMAKE_SOURCE_DIR}/test/test_address.cc")
+file(GLOB_RECURSE TEST_SOURCES "${CMAKE_SOURCE_DIR}/test/test_socket.cc")
 
 # 7. 合并src和test的源文件到总变量（核心：避免覆盖，整合所有需要的.cc文件）
 set(ALL_SOURCES ${SRC_SOURCES} ${TEST_SOURCES})
@@ -46,4 +46,4 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out)
 set(CMAKE_BUILD_TYPE Debug)
 
 # 10. 构建可执行文件（使用合并后的所有源文件）
-add_executable(test_address ${ALL_SOURCES})
+add_executable(test_socket ${ALL_SOURCES})

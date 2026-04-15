@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __FLZ_ENDIAN_H__
-#define __FLZ_ENDIAN_H__
+#ifndef __FLZ_MY_ENDIAN_H__
+#define __FLZ_MY_ENDIAN_H__
 
 #include <byteswap.h>
 #include <stdint.h>
