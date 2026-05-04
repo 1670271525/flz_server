@@ -23,14 +23,14 @@ void run() {
             return 0;
     });
 
-    sd->addGlobServlet("/flz/*", [](flz::http::HttpRequest::ptr req
+    sd->addGlobServlet("/flz/glob/*", [](flz::http::HttpRequest::ptr req
                 ,flz::http::HttpResponse::ptr rsp
                 ,flz::http::HttpSession::ptr session) {
             rsp->setBody("Glob:\r\n" + req->toString());
             return 0;
     });
 
-    sd->addGlobServlet("/flz/*", [](flz::http::HttpRequest::ptr req
+    sd->addGlobServlet("/flz/404/*", [](flz::http::HttpRequest::ptr req
                 ,flz::http::HttpResponse::ptr rsp
                 ,flz::http::HttpSession::ptr session) {
             rsp->setBody(XX(<html>
