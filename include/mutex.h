@@ -77,7 +77,7 @@ namespace flz {
 			m_lock = true;
 		}
 		~WriteScopedLockImpl(){
-			m_mutex.unlock();
+			unlock();
 		}
 		void lock(){
 			if(!m_lock){
@@ -87,7 +87,7 @@ namespace flz {
 		}
 		void unlock(){
 			if(m_lock){
-				m_mutex.wrlock();
+				m_mutex.unlock();
 				m_lock = false;
 			}
 		}

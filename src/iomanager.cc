@@ -37,7 +37,7 @@ namespace flz {
 		if(!events)return os<<"0";
 		int first = true;
 #define XX(E)\
-		if(events&&E){\
+		if(events&E){\
 			if(!first)os << '|';\
 			os << #E;\
 			first = false;\
@@ -133,6 +133,7 @@ namespace flz {
 			fd_ctx = m_fdContexts[fd];
 			lock.unlock();
 		}else{
+			lock.unlock();
 			RWMutexType::WriteLock lock2(m_mutex);
 			contextResize(fd*1.5);
 			fd_ctx = m_fdContexts[fd];

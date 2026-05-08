@@ -45,7 +45,7 @@ void HttpServer::handleClient(Socket::ptr client) {
         HttpResponse::ptr rsp(new HttpResponse(req->getVersion()
                             ,req->isClose() || !m_isKeepalive));
         rsp->setHeader("Server", getName());
-        rsp->setBody("hello flz");
+        //rsp->setBody("hello flz");
 		m_dispatch->handle(req, rsp, session);
 
         session->sendResponse(rsp);

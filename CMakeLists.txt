@@ -126,8 +126,9 @@ flz_add_executable(test_uri "test/test_uri.cc" flz "${LIBS}")
 flz_add_executable(test_http_connections "test/test_http_connections.cc" flz "${LIBS}")
 
 
+flz_add_executable(my_http_server "samples/my_http_server.cc" flz "${LIBS}")
 
-
+#target_link_libraries(my_http_server tcmalloc)
 
 
 #target_link_libraries(test_http_server PRIVATE yaml-cpp)

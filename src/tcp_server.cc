@@ -18,7 +18,7 @@ TcpServer::TcpServer(flz::IOManager* worker,
     ,m_ioWorker(io_worker)
     ,m_acceptWorker(accept_worker)
     ,m_recvTimeout(g_tcp_server_read_timeout->getValue())
-    ,m_name("sylar/1.0.0")
+    ,m_name("flz/1.0.0")
     ,m_isStop(true) {
 }
 

@@ -42,7 +42,7 @@ namespace flz {
 		ucontext_t m_ctx;
 		State m_state = INIT;
 		void* m_stack = nullptr;
-		uint32_t m_stacksize;
+		uint32_t m_stacksize = 0;
 		std::function<void()> m_cb;
 
 	};

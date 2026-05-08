@@ -324,7 +324,7 @@ extern "C"{
 					va_end(va);
 					int arg = fcntl_f(fd,cmd);
 					flz::FdCtx::ptr ctx = flz::FdMgr::GetInstance()->get(fd);
-					if(!ctx&&ctx->isClose()&&!ctx->isSocket()){
+					if(!ctx || ctx->isClose() || !ctx->isSocket()){
 						return arg;
 					}
 					if(ctx->getUserNonblock()){
@@ -393,7 +393,7 @@ extern "C"{
 		if(FIONBIO == request){
 			bool user_nonblock = !!*(int*)arg;
 			flz::FdCtx::ptr ctx = flz::FdMgr::GetInstance()->get(d);
-			if(!ctx&&ctx->isClose()&&!ctx->isSocket()){
+			if(!ctx || ctx->isClose() || !ctx->isSocket()){
 				return ioctl_f(d,request,arg);
 			}
 			ctx->setUserNonblock(user_nonblock);

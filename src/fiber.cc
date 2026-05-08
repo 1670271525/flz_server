@@ -7,7 +7,7 @@
 
 namespace flz {
 
-	static uint64_t constexpr STACKSIZE = 1024*128;
+	static uint32_t const STACKSIZE = 32*128;
 
 	static std::atomic<uint64_t> s_fiber_id{0};
 	static std::atomic<uint64_t> s_fiber_count{0};
@@ -49,10 +49,13 @@ namespace flz {
 
 	Fiber::~Fiber(){
 		--s_fiber_count;
-		MallocStackAllocator::Dealloc(m_stack,m_stacksize);
-		Fiber* cur = t_fiber;
-		if(cur == this)SetThis(nullptr);
-
+		if(m_stack){
+			MallocStackAllocator::Dealloc(m_stack,m_stacksize);
+		}else{
+			Fiber* cur = t_fiber;
+			if(cur == this)SetThis(nullptr);
+		
+		}
 	}
 
 
@@ -69,7 +72,7 @@ namespace flz {
 	
 	void Fiber::call(){
 		SetThis(this);
-		m_state = State::END;
+		m_state = State::RUNNING;
 		swapcontext(&t_thread_fiber->m_ctx,&m_ctx);
 	}
 	
@@ -105,7 +108,7 @@ namespace flz {
 			cur->m_state = EXCEPT;
 		}
 		auto raw_ptr = cur.get();
-		cur->reset(nullptr);
+		cur.reset();
 		raw_ptr->back();
 	}
 
@@ -122,7 +125,7 @@ namespace flz {
 		}
 		
 		auto raw_ptr = cur.get();
-		cur->reset(nullptr);
+		cur.reset();
 		raw_ptr->swapOut();
 	
 	}
@@ -143,7 +146,7 @@ namespace flz {
 			perror("fiber is running");
 			return;
 		}
-		cur->m_state = HOLD;
+		//cur->m_state = HOLD;
 		cur->swapOut();
 	}
 

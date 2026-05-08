@@ -88,7 +88,7 @@ namespace flz{
 	}
 
 	void FdManager::del(int fd){
-		RWMutexType::ReadLock lock(m_mutex);
+		RWMutexType::WriteLock lock(m_mutex);
 		if(fd>=(int)m_datas.size())return;
 		m_datas[fd].reset();
 	}
