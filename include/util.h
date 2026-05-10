@@ -11,8 +11,8 @@
 #include <vector>
 #include <sys/types.h>
 #include <signal.h>
-
-
+#include "crypto_util.h"
+#include "hash_util.h"
 
 namespace flz{
 	

@@ -35,6 +35,33 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)  # 强制使用C++11，避免编译器降级
 
 find_package(yaml-cpp REQUIRED)
 
+find_package(Boost REQUIRED)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+#find_package(MySQL REQUIRED)
+#if(MYSQL_FOUND)
+	#include_directories(${MYSQL_INCLUDE_DIR})
+#endif()
+
+find_package(Protobuf)
+if(Protobuf_FOUND)
+    include_directories(${Protobuf_INCLUDE_DIRS})
+endif()
+
+find_package(OpenSSL REQUIRED)
+if(OPENSSL_FOUND)
+    include_directories(${OPENSSL_INCLUDE_DIR})
+endif()
+
+find_package(ZLIB REQUIRED)
+if(ZLIB_FOUND)
+    include_directories(${ZLIB_INCLUDE_DIR})
+endif()
+
+
+
 
 # 定义所有源文件列表
 set(LIB_SRC
@@ -60,6 +87,10 @@ set(LIB_SRC
     src/timer.cc
     src/timestamp.cc
     src/util.cc
+	src/crypto_util.cc
+	src/hash_util.cc
+
+
     
     # http 目录下的源文件
     http/http.cc
@@ -69,6 +100,13 @@ set(LIB_SRC
     http/http_session.cc
     http/servlet.cc
     http/servlets/config_servlet.cc
+	http/ws_session.cc
+	http/ws_servlet.cc
+	http/ws_server.cc
+	http/ws_connection.cc
+	
+
+
     
     # streams 目录下的源文件
     streams/socket_stream.cc
@@ -105,6 +143,9 @@ add_library(flz SHARED ${LIB_SRC})
 set(LIBS
         flz
 		yaml-cpp
+		${ZLIB_LIBRARIES}
+        ${OPENSSL_LIBRARIES}
+        ${PROTOBUF_LIBRARIES}
 	)
 
 
@@ -127,6 +168,12 @@ flz_add_executable(test_http_connections "test/test_http_connections.cc" flz "${
 
 
 flz_add_executable(my_http_server "samples/my_http_server.cc" flz "${LIBS}")
+
+
+flz_add_executable(test_ws_client "test/test_ws_client.cc" flz "${LIBS}")
+
+
+flz_add_executable(test_ws_server "test/test_ws_server.cc" flz "${LIBS}")
 
 #target_link_libraries(my_http_server tcmalloc)
 
