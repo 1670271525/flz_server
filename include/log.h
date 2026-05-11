@@ -30,6 +30,7 @@
 
 #define FLZ_LOG_ROOT() flz::LoggerMgr::GetInstance()->getRoot()
 
+#define FLZ_LOG_NAME(name) flz::LoggerMgr::GetInstance()->getLogger(name)
 
 namespace flz {
 
@@ -163,7 +164,7 @@ namespace flz {
 	public:
 		LoggerManager();
 		Logger::ptr getRoot() const{return m_root;}
-		Logger::ptr getLogger(std::string& name)const;
+		Logger::ptr getLogger(const std::string& name)const;
 	private:
 		std::unordered_map<std::string,Logger::ptr> m_loggers;
 		Logger::ptr m_root;

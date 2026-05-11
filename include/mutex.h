@@ -1,10 +1,17 @@
 #ifndef __FLZ_MUTEX_H__
 #define __FLZ_MUTEX_H__
 
-#include <semaphore.h>
-#include <string.h>
 #include <thread>
+#include <functional>
+#include <memory>
+#include <pthread.h>
+#include <semaphore.h>
+#include <stdint.h>
+#include <atomic>
+#include <list>
+
 #include "nocopyable.h"
+#include "fiber.h"
 
 namespace flz {
 	class Semaphore :public flz::Nocopyable{
@@ -137,6 +144,71 @@ namespace flz {
 	private:
 		pthread_rwlock_t m_lock;
 	};
+
+	/**
+	 * @brief 自旋锁
+	 */
+	class Spinlock : Nocopyable {
+	public:
+		/// 局部锁
+		typedef ScopedLockImpl<Spinlock> Lock;
+
+		/**
+		 * @brief 构造函数
+		 */
+		Spinlock() {
+			pthread_spin_init(&m_mutex, 0);
+		}
+
+		/**
+		 * @brief 析构函数
+		 */
+		~Spinlock() {
+			pthread_spin_destroy(&m_mutex);
+		}
+
+		/**
+		 * @brief 上锁
+		 */
+		void lock() {
+			pthread_spin_lock(&m_mutex);
+		}
+
+		/**
+		 * @brief 解锁
+		 */
+		void unlock() {
+			pthread_spin_unlock(&m_mutex);
+		}
+	private:
+		/// 自旋锁
+		pthread_spinlock_t m_mutex;
+	};
+
+
+	class Scheduler;
+	class FiberSemaphore : Nocopyable {
+	public:
+		typedef Spinlock MutexType;
+
+		FiberSemaphore(size_t initial_concurrency = 0);
+		~FiberSemaphore();
+
+		bool tryWait();
+		void wait();
+		void notify();
+
+		size_t getConcurrency() const { return m_concurrency;}
+		void reset() { m_concurrency = 0;}
+	private:
+		MutexType m_mutex;
+		std::list<std::pair<Scheduler*, Fiber::ptr> > m_waiters;
+		size_t m_concurrency;
+	};
+
+
+
+
 }
 
 

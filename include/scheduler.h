@@ -50,6 +50,8 @@ namespace flz {
 			if(need_tickle)tickle();
 		}
 
+		void switchTo(int thread = -1);
+   		std::ostream& dump(std::ostream& os);
 	protected:
 		void run();
 		virtual void tickle();

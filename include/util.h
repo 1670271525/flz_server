@@ -13,6 +13,9 @@
 #include <signal.h>
 #include "crypto_util.h"
 #include "hash_util.h"
+#include <boost/lexical_cast.hpp>
+
+
 
 namespace flz{
 	
@@ -86,6 +89,18 @@ namespace flz{
 	time_t Str2Time(const char* str, const char* format = "%Y-%m-%d %H:%M:%S");
 
 
+	template<class V, class Map, class K>
+	V GetParamValue(const Map& m, const K& k, const V& def = V()) {
+		auto it = m.find(k);
+		if(it == m.end()) {
+			return def;
+		}
+		try {
+			return boost::lexical_cast<V>(it->second);
+		} catch (...) {
+		}
+		return def;
+	}
 
 
 
