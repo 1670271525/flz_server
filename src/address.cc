@@ -3,9 +3,9 @@
 #include <stddef.h>
 #include <netdb.h>
 #include <sstream>
-#include "../include/address.h"
-#include "../include/log.h"
-#include "../include/my_endian.h"
+#include "include/address.h"
+#include "include/log.h"
+#include "include/my_endian.h"
 
 
 namespace flz {

@@ -1,6 +1,6 @@
-#include "../include/scheduler.h"
-#include "../include/log.h"
-#include "../include/hook.h"
+#include "include/scheduler.h"
+#include "include/log.h"
+#include "include/hook.h"
 
 
 

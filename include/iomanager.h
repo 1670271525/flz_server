@@ -2,8 +2,8 @@
 #ifndef __FLZ_IOMANAGER_H__
 #define __FLZ_IOMANAGER_H__
 
-#include "scheduler.h"
-#include "timer.h"
+#include "include/scheduler.h"
+#include "include/timer.h"
 
 
 namespace flz{

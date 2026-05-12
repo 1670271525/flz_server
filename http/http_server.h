@@ -2,10 +2,10 @@
 #ifndef __FLZ_HTTP_SERVER_H__
 #define __FLZ_HTTP_SERVER_H__
 
-#include "../include/config.h"
-#include "../include/tcp_server.h"
-#include "http_session.h"
-#include "servlet.h"
+#include "include/config.h"
+#include "include/tcp_server.h"
+#include "http/http_session.h"
+#include "http/servlet.h"
 
 
 namespace flz {

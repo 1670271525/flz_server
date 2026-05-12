@@ -2,12 +2,12 @@
 #define __FLZ_THREADPOOL_H__
 
 #include <stdint.h>
-#include "thread.h"
-#include "mutex.h"
+#include "include/thread.h"
+#include "include/mutex.h"
 #include <queue>
 #include <vector>
 #include <memory.h>
-#include "fiber.h"
+#include "include/fiber.h"
 
 
 namespace flz {

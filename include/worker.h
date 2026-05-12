@@ -2,10 +2,10 @@
 #ifndef __FLZ_WORKER_H__
 #define __FLZ_WORKER_H__
 
-#include "mutex.h"
-#include "singleton.h"
-#include "log.h"
-#include "iomanager.h"
+#include "include/mutex.h"
+#include "include/singleton.h"
+#include "include/log.h"
+#include "include/iomanager.h"
 
 namespace flz {
 

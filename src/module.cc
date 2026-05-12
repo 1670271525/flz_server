@@ -1,10 +1,10 @@
-#include "../include/module.h"
-#include "../include/library.h"
-#include "../include/log.h"
-#include "../include/util.h"
-#include "../include/config.h"
-#include "../include/env.h"
-#include "../include/application.h"
+#include "include/module.h"
+#include "include/library.h"
+#include "include/log.h"
+#include "include/util.h"
+#include "include/config.h"
+#include "include/env.h"
+#include "include/application.h"
 
 namespace flz{
 

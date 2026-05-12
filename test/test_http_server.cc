@@ -1,5 +1,5 @@
-#include "../http/http_server.h"
-#include "../include/log.h"
+#include "http/http_server.h"
+#include "include/log.h"
 
 static flz::Logger::ptr g_logger = FLZ_LOG_ROOT();
 

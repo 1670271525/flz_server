@@ -6,7 +6,7 @@
 #include <functional>
 #include <iostream>
 
-#include "../include/macro.h"
+#include "include/macro.h"
 
 
 

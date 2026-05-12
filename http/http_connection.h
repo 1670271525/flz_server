@@ -3,10 +3,10 @@
 #define __FLZ_HTTP_CONNECTION_H__
 
 
-#include "..//streams/socket_stream.h"
-#include "http.h"
-#include "../include/uri.h"
-#include "../include/thread.h"
+#include "streams/socket_stream.h"
+#include "http/http.h"
+#include "include/uri.h"
+#include "include/thread.h"
 
 
 namespace flz {

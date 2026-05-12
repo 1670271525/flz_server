@@ -3,7 +3,7 @@
 #define __FLZ_MACRO_H__
 
 #include <assert.h>
-#include "log.h"
+#include "include/log.h"
 #include <string.h>
 
 #if defined __GNUC__ || defined __llvm__

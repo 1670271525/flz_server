@@ -1,5 +1,5 @@
-#include "socket_stream.h"
-#include "../include/util.h"
+#include "streams/socket_stream.h"
+#include "include/util.h"
 
 
 namespace flz {

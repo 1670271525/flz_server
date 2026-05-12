@@ -1,5 +1,5 @@
-#include "../include/iomanager.h"
-#include "../include/hook.h"
+#include "include/iomanager.h"
+#include "include/hook.h"
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>

@@ -1,7 +1,7 @@
-#include "../include/library.h"
-#include "../include/config.h"
-#include "../include/env.h"
-#include "../include/log.h"
+#include "include/library.h"
+#include "include/config.h"
+#include "include/env.h"
+#include "include/log.h"
 #include <dlfcn.h>
 
 

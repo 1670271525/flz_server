@@ -1,6 +1,6 @@
-#include "../include/daemon.h"
-#include "../include/log.h"
-#include "../include/config.h"
+#include "include/daemon.h"
+#include "include/log.h"
+#include "include/config.h"
 
 #include <time.h>
 #include <string.h>

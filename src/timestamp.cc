@@ -1,4 +1,4 @@
-#include "../include/timestamp.h"
+#include "include/timestamp.h"
 #include <time.h>
 
 

@@ -7,10 +7,10 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "http.h"
-#include "http_session.h"
-#include "../include/util.h"
-#include "../include/thread.h"
+#include "http/http.h"
+#include "http/http_session.h"
+#include "include/util.h"
+#include "include/thread.h"
 
 
 

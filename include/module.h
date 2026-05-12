@@ -3,9 +3,9 @@
 #define __FLZ_MODULE_H__
 
 
-#include "stream.h"
-#include "singleton.h"
-#include "mutex.h"
+#include "include/stream.h"
+#include "include/singleton.h"
+#include "include/mutex.h"
 #include <unordered_map>
 #include <map>
 #include <functional>

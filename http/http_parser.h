@@ -2,9 +2,9 @@
 #define __FLZ_HTTP_PARSER_H__
 
 
-#include "http11_parser.h"
-#include "http.h"
-#include "httpclient_parser.h"
+#include "http/http11_parser.h"
+#include "http/http.h"
+#include "http/httpclient_parser.h"
 
 namespace flz {
 

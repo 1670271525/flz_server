@@ -1,5 +1,5 @@
-#include "../include/address.h"
-#include "../include/log.h"
+#include "include/address.h"
+#include "include/log.h"
 
 flz::Logger::ptr g_logger = FLZ_LOG_ROOT();
 

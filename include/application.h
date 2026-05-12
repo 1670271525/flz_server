@@ -3,7 +3,7 @@
 #define __FLZ_APPLICATION_H__
 
 
-#include "../http/http_server.h"
+#include "http/http_server.h"
 
 namespace flz {
 

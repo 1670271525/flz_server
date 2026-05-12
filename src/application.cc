@@ -1,15 +1,15 @@
-#include "../include/application.h"
+#include "include/application.h"
 #include <unistd.h>
 #include <signal.h>
 
-#include "../include/tcp_server.h"
-#include "../include/daemon.h"
-#include "../include/config.h"
-#include "../include/env.h"
-#include "../include/log.h"
-#include "../include/module.h"
-#include "../include/worker.h"
-#include "../http/ws_server.h"
+#include "include/tcp_server.h"
+#include "include/daemon.h"
+#include "include/config.h"
+#include "include/env.h"
+#include "include/log.h"
+#include "include/module.h"
+#include "include/worker.h"
+#include "http/ws_server.h"
 
      
 namespace flz{

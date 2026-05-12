@@ -2,9 +2,9 @@
 #ifndef __FLZ_HTTP_WS_SERVER_H__
 #define __FLZ_HTTP_WS_SERVER_H__
 
-#include "../include/tcp_server.h"
-#include "ws_session.h"
-#include "ws_servlet.h"
+#include "include/tcp_server.h"
+#include "http/ws_session.h"
+#include "http/ws_servlet.h"
 
 namespace flz {
 

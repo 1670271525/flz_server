@@ -3,10 +3,10 @@
 #define __FLZ_SOCKET_SESSION_H__
 
 
-#include "../include/mutex.h"
-#include "../include/stream.h"
-#include "../include/iomanager.h"
-#include "../include/socket.h"
+#include "include/mutex.h"
+#include "include/stream.h"
+#include "include/iomanager.h"
+#include "include/socket.h"
 
 
 namespace flz {

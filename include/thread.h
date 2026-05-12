@@ -7,8 +7,8 @@
 #include <memory>
 #include <functional>
 
-#include "mutex.h"
-#include "nocopyable.h"
+#include "include/mutex.h"
+#include "include/nocopyable.h"
 
 
 namespace flz {

@@ -1,8 +1,8 @@
 #include <iostream>
-#include "../http/http_connection.h"
-#include "../include/log.h"
-#include "../include/iomanager.h"
-#include "../http/http_parser.h"
+#include "http/http_connection.h"
+#include "include/log.h"
+#include "include/iomanager.h"
+#include "http/http_parser.h"
 #include <fstream>
 
 static flz::Logger::ptr g_logger = FLZ_LOG_ROOT();

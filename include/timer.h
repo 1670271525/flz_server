@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <functional>
-#include "../include/thread.h"
+#include "include/thread.h"
 #include <vector>
 #include <set>
 

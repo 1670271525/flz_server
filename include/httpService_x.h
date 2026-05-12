@@ -8,7 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <functional>
-#include "../include/util.h"
+#include "include/util.h"
 
 namespace flz {
 	

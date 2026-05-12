@@ -3,8 +3,8 @@
 #define __FLZ_SCHEDULER_H__
 
 #include <iostream>
-#include "thread.h"
-#include "fiber.h"
+#include "include/thread.h"
+#include "include/fiber.h"
 #include <memory>
 #include <functional>
 #include <vector>

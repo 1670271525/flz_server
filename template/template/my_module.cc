@@ -1,8 +1,8 @@
-#include "my_module.h"
+#include "template/template/my_module.h"
 
 
-#include "../../include/config.h"
-#include "../../include/log.h"
+#include "include/config.h"
+#include "include/log.h"
 
 namespace name_space {
 

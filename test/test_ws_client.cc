@@ -1,6 +1,6 @@
-#include "../http/ws_connection.h"
-#include "../include/iomanager.h"
-#include "../include/util.h"
+#include "http/ws_connection.h"
+#include "include/iomanager.h"
+#include "include/util.h"
 
 
 void run() {

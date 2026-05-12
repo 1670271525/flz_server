@@ -3,7 +3,7 @@
 #define __FLZ_HTTP_CONFIG_SERVLET_H__
 
 
-#include "../servlet.h"
+#include "http/servlet.h"
 
 
 namespace flz {

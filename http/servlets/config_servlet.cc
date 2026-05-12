@@ -1,8 +1,8 @@
 /*
 
-#include "config_servlet.h"
+#include "http/servlets/config_servlet.h"
 
-#include "../../include/config.h"
+#include "include/config.h"
 
 namespace flz {
 

@@ -1,5 +1,5 @@
-#include "../include/tcp_server_x.h"
-#include "../include/threadpool.h"
+#include "include/tcp_server_x.h"
+#include "include/threadpool.h"
 #include <unordered_set>
 #include <memory.h>
 

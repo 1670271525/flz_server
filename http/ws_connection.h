@@ -2,8 +2,8 @@
 #ifndef __FLZ_HTTP_WS_CONNECTION_H__
 #define __FLZ_HTTP_WS_CONNECTION_H__
 
-#include "http_connection.h"
-#include "ws_session.h"
+#include "http/http_connection.h"
+#include "http/ws_session.h"
 
 
 namespace flz {

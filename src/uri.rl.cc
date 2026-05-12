@@ -1,6 +1,6 @@
 
 #line 1 "/home/fang/Desktop/CppProject/TcpServerProject01/src/uri.rl"
-#include "uri.h"
+#include "include/uri.h"
 #include <sstream>
 
 namespace flz {

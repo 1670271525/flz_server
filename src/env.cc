@@ -1,12 +1,12 @@
-#include "../include/env.h"
+#include "include/env.h"
 
 #include <string.h>
 #include <iostream>
 #include <iomanip>
 #include <unistd.h>
 #include <stdlib.h>
-#include "../include/config.h"
-#include "../include/log.h"
+#include "include/config.h"
+#include "include/log.h"
 
 namespace flz {
 

@@ -2,7 +2,7 @@
 #ifndef __FLZ_STREAM_H__
 #define __FLZ_STREAM_H__
 
-#include "bytearray.h"
+#include "include/bytearray.h"
 #include <memory>
 
 

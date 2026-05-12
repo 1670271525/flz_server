@@ -1,9 +1,9 @@
 #ifndef __FLZ__CHANNEL_H__
 #define __FLZ__CHANNEL_H__
 
-#include "nocopyable.h"
+#include "include/nocopyable.h"
 #include <functional>
-#include "timestamp.h"
+#include "include/timestamp.h"
 #include <memory>
 
 namespace flz {

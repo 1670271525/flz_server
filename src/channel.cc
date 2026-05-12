@@ -1,4 +1,4 @@
-#include "../include/channel.h"
+#include "include/channel.h"
 
 
 namespace flz {

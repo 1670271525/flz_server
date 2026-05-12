@@ -1,4 +1,4 @@
-#include "../include/log.h"
+#include "include/log.h"
 #include <cstdarg>
 
 namespace flz {
@@ -408,7 +408,7 @@ namespace flz {
 		
 	}
 	
-	Logger::ptr LoggerManager::getLogger(std::string& name)const{
+	Logger::ptr LoggerManager::getLogger(const std::string& name)const{
 		auto it = m_loggers.find(name);
 		if(it == m_loggers.end())return nullptr;
 		return it->second;

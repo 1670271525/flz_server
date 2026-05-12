@@ -1,6 +1,6 @@
-#include "../include/threadpool.h"
+#include "include/threadpool.h"
 #include <chrono>
-#include "../include/mutex.h"
+#include "include/mutex.h"
 #include <iostream>
 
 flz::Mutex m_mutex;

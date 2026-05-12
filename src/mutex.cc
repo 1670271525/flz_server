@@ -1,7 +1,7 @@
-#include "../include/mutex.h"
+#include "include/mutex.h"
 #include <stdexcept>
-#include "../include/macro.h"
-#include "../include/scheduler.h"
+#include "include/macro.h"
+#include "include/scheduler.h"
 
 namespace flz {
 	

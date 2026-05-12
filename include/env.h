@@ -5,8 +5,8 @@
 
 #include <map>
 #include <vector>
-#include "singleton.h"
-#include "thread.h"
+#include "include/singleton.h"
+#include "include/thread.h"
 
 
 namespace flz {

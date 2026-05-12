@@ -1,9 +1,9 @@
-#include "../include/iomanager.h"
-#include "../include/log.h"
+#include "include/iomanager.h"
+#include "include/log.h"
 #include <sys/epoll.h>
 #include <errno.h>
 #include <unistd.h>
-#include "../include/macro.h"
+#include "include/macro.h"
 #include <fcntl.h>
 #include <stdexcept>
 

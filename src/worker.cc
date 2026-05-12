@@ -1,6 +1,6 @@
-#include "../include/worker.h"
-#include "../include/config.h"
-#include "../include/util.h"
+#include "include/worker.h"
+#include "include/config.h"
+#include "include/util.h"
 
 
 namespace flz {

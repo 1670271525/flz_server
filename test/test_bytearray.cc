@@ -1,6 +1,6 @@
-#include "../include/bytearray.h"
-#include "../include/log.h"
-#include "../include/macro.h"
+#include "include/bytearray.h"
+#include "include/log.h"
+#include "include/macro.h"
 
 
 static flz::Logger::ptr g_logger = FLZ_LOG_ROOT();

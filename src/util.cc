@@ -1,7 +1,7 @@
-#include "../include/util.h"
+#include "include/util.h"
 #include <iostream>
 #include <execinfo.h>
-#include "../include/log.h"
+#include "include/log.h"
 #include <sys/time.h>
 #include <dirent.h>
 #include <string.h>

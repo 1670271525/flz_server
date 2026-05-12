@@ -1,8 +1,8 @@
-#include "../include/fd_manager.h"
+#include "include/fd_manager.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../include/hook.h"
+#include "include/hook.h"
 #include <fcntl.h>
 
 

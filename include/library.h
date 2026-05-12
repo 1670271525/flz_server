@@ -3,7 +3,7 @@
 #define __FLZ_LIBRARY_H__
 
 #include <memory>
-#include "module.h"
+#include "include/module.h"
 
 namespace flz {
 

@@ -1,10 +1,10 @@
-#include "../include/config.h"
+#include "include/config.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "../include/util.h"
-#include "../include/env.h"
+#include "include/util.h"
+#include "include/env.h"
 
 
 

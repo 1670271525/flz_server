@@ -1,7 +1,7 @@
-#include "http_connection.h"
-#include "http_parser.h"
-#include "../include/log.h"
-//#include "../streams/zlib_stream.h"
+#include "http/http_connection.h"
+#include "http/http_parser.h"
+#include "include/log.h"
+//#include "streams/zlib_stream.h"
 
 
 

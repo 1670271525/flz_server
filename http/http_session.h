@@ -3,8 +3,8 @@
 #define __FLZ_HTTP_SESSION_H__
 
 
-#include "../streams/socket_stream.h"
-#include "http.h"
+#include "streams/socket_stream.h"
+#include "http/http.h"
 
 
 

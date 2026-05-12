@@ -4,7 +4,7 @@
 
 #include <unistd.h>
 #include <functional>
-#include "singleton.h"
+#include "include/singleton.h"
 
 namespace flz {
 

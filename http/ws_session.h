@@ -2,8 +2,8 @@
 #ifndef __FLZ_HTTP_WS_SESSION_H__
 #define __FLZ_HTTP_WS_SESSION_H__
 
-#include "http_session.h"
-#include "../include/config.h"
+#include "http/http_session.h"
+#include "include/config.h"
 #include <stdint.h>
 
 

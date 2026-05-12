@@ -1,8 +1,8 @@
-#include "../include/hook.h"
-#include "../include/log.h"
+#include "include/hook.h"
+#include "include/log.h"
 #include <dlfcn.h>
-#include "../include/iomanager.h"
-#include "../include/fd_manager.h"
+#include "include/iomanager.h"
+#include "include/fd_manager.h"
 #include <stdarg.h>
 
 static flz::Logger::ptr g_logger = FLZ_LOG_ROOT();

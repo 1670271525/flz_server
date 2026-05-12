@@ -11,8 +11,8 @@
 #include <vector>
 #include <sys/types.h>
 #include <signal.h>
-#include "crypto_util.h"
-#include "hash_util.h"
+#include "include/crypto_util.h"
+#include "include/hash_util.h"
 #include <boost/lexical_cast.hpp>
 
 
