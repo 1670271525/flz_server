@@ -23,7 +23,7 @@ cmake_minimum_required(VERSION 3.10)
 # 2. 规范顺序：先声明项目（靠前放置）
 project(TcpServer)
 
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include (cmake/utils.cmake)
 

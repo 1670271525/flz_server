@@ -14,7 +14,7 @@
 #include "include/crypto_util.h"
 #include "include/hash_util.h"
 #include <boost/lexical_cast.hpp>
-
+#include "include/json_util.h"
 
 
 namespace flz{
@@ -102,7 +102,15 @@ namespace flz{
 		return def;
 	}
 
-
+	class TypeUtil {
+	public:
+		static int8_t ToChar(const std::string& str);
+		static int64_t Atoi(const std::string& str);
+		static double Atof(const std::string& str);
+		static int8_t ToChar(const char* str);
+		static int64_t Atoi(const char* str);
+		static double Atof(const char* str);
+	};
 
 
 }

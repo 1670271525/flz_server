@@ -20,12 +20,12 @@ static	flz::Logger::ptr g_logger = FLZ_LOG_NAME("system");
 
 static flz::ConfigVar<std::string>::ptr g_server_work_path =
     flz::Config::Lookup("server.work_path"
-            ,std::string("/apps/work/sylar")
+            ,std::string("/apps/work/flz")
             , "server work path");
 
 static flz::ConfigVar<std::string>::ptr g_server_pid_file =
     flz::Config::Lookup("server.pid_file"
-            ,std::string("sylar.pid")
+            ,std::string("flz.pid")
             , "server pid file");
 
 static flz::ConfigVar<std::string>::ptr g_service_discovery_zk =
@@ -280,16 +280,9 @@ int Application::run_fiber() {
     for(auto& i : modules) {
         i->onServerUp();
     }
-    //ZKServiceDiscovery::ptr m_serviceDiscovery;
-    //RockSDLoadBalance::ptr m_rockSDLoadBalance;
-    //sylar::ZKServiceDiscovery::ptr zksd(new sylar::ZKServiceDiscovery("127.0.0.1:21811"));
-    //zksd->registerServer("blog", "chat", sylar::GetIPv4() + ":8090", "xxx");
-    //zksd->queryServer("blog", "chat");
-    //zksd->setSelfInfo(sylar::GetIPv4() + ":8090");
-    //zksd->setSelfData("vvv");
-    //static RockSDLoadBalance::ptr rsdlb(new RockSDLoadBalance(zksd));
-    //rsdlb->start();
-    return 0;
+    //zip
+
+	return 0;
 }
 
 bool Application::getServer(const std::string& type, std::vector<TcpServer::ptr>& svrs) {

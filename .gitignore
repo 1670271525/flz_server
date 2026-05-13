@@ -4,3 +4,5 @@ bin/
 .vscode/
 Log/
 out/
+.cache
+
