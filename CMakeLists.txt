@@ -88,10 +88,15 @@ set(LIB_SRC
     src/timestamp.cc
     src/util.cc
 	src/crypto_util.cc
+	src/json_util.cc
 	src/hash_util.cc
+	src/application.cc
+	src/worker.cc
+    src/module.cc
+	src/library.cc
+	src/daemon.cc
 
 
-    
     # http 目录下的源文件
     http/http.cc
     http/http_parser.cc
@@ -145,6 +150,7 @@ add_library(flz SHARED ${LIB_SRC})
 set(LIBS
         flz
 		yaml-cpp
+		jsoncpp
 		${ZLIB_LIBRARIES}
         ${OPENSSL_LIBRARIES}
         ${PROTOBUF_LIBRARIES}
@@ -152,7 +158,9 @@ set(LIBS
 
 
 # 8. 指定可执行文件输出目录（你的原始配置，保留）
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # 9. 设置构建模式为Debug（支持调试，你的原始配置，保留）
 set(CMAKE_BUILD_TYPE Debug)
@@ -176,6 +184,11 @@ flz_add_executable(test_ws_client "test/test_ws_client.cc" flz "${LIBS}")
 
 
 flz_add_executable(test_ws_server "test/test_ws_server.cc" flz "${LIBS}")
+
+flz_add_executable(test_socket "test/test_socket.cc" flz "${LIBS}")
+
+flz_add_executable(bin_flz "src/main.cc" flz "${LIBS}")
+set_target_properties(bin_flz PROPERTIES OUTPUT_NAME "flz")
 
 #target_link_libraries(my_http_server tcmalloc)
 

@@ -1,0 +1,13 @@
+logs:
+    - name: root
+      level: info
+      appenders:
+          - type: FileLogAppender
+            file: /home/fang/Desktop/Logs/flz_server/root.txt
+          - type: StdoutLogAppender
+    - name: system
+      level: info
+      appenders:
+          - type: FileLogAppender
+            file: /home/fang/Desktop/Logs/flz_server/system.txt
+          - type: StdoutLogAppender

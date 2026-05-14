@@ -1,5 +1,7 @@
 #include "include/socket.h"
 #include "include/iomanager.h"
+#include "include/tcp_server.h"
+
 
 static flz::Logger::ptr g_looger = FLZ_LOG_ROOT();
 
@@ -42,12 +44,21 @@ void test_socket() {
     FLZ_LOG_INFO(g_looger) << buffs;
 }
 
-
+void test_tcp(){
+	flz::TcpServer::ptr server(new flz::TcpServer());
+	flz::Address::ptr addr = flz::Address::LookupAnyIPAddress("0.0.0.0:8020");
+    while(!server->bind(addr)) {
+        sleep(2);
+    }
+	server->start();
+}
 
 int main(){
 	
 	flz::IOManager iom;
-	iom.schedule(&test_socket);
+	//iom.schedule(&test_socket);
+
+	iom.schedule(&test_tcp);
 
 	return 0;
 
