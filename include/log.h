@@ -16,8 +16,7 @@
 
 #include "include/util.h"
 #include "include/singleton.h"
-
-
+#include "include/mutex.h"
 
 #define FLZ_LOG_LEVEL(logger,level)\
 	if(logger->getLevel()<=level)\
@@ -116,7 +115,9 @@ namespace flz {
 		bool m_hasFormatter = false;
 	};
 
+	class LoggerManager;
 	class Logger:public std::enable_shared_from_this<Logger>{
+	friend class LoggerManager;
 	public:
 		typedef std::shared_ptr<Logger> ptr;
 		Logger(const std::string& name = "root");
@@ -162,10 +163,12 @@ namespace flz {
 
 	class LoggerManager{
 	public:
+		typedef Spinlock MutexType;
 		LoggerManager();
 		Logger::ptr getRoot() const{return m_root;}
-		Logger::ptr getLogger(const std::string& name)const;
+		Logger::ptr getLogger(const std::string& name);
 	private:
+		MutexType m_mutex;
 		std::unordered_map<std::string,Logger::ptr> m_loggers;
 		Logger::ptr m_root;
 	};

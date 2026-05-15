@@ -11,7 +11,6 @@
 #include <list>
 
 #include "include/nocopyable.h"
-#include "include/fiber.h"
 
 namespace flz {
 	class Semaphore :public flz::Nocopyable{
@@ -185,7 +184,13 @@ namespace flz {
 		pthread_spinlock_t m_mutex;
 	};
 
+}
 
+#include "include/fiber.h"
+
+namespace flz {
+
+	class Fiber;
 	class Scheduler;
 	class FiberSemaphore : Nocopyable {
 	public:
@@ -202,7 +207,7 @@ namespace flz {
 		void reset() { m_concurrency = 0;}
 	private:
 		MutexType m_mutex;
-		std::list<std::pair<Scheduler*, Fiber::ptr> > m_waiters;
+		std::list<std::pair<Scheduler*, std::shared_ptr<Fiber> > > m_waiters;
 		size_t m_concurrency;
 	};
 
