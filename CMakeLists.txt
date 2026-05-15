@@ -124,9 +124,9 @@ ragelmaker(http/httpclient_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/http)
 ragelmaker(src/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # 4. 包含头文件目录（你的原始配置，保留）
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 # 支持从仓库根目录的绝对 include 路径（如 include/foo.h、http/foo.h）
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR})
 
 # 5. 正确收集src目录下所有.cc文件（无语法错误）
 #file(GLOB_RECURSE SRC_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cc")
@@ -158,9 +158,9 @@ set(LIBS
 
 
 # 8. 指定可执行文件输出目录（你的原始配置，保留）
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 # 9. 设置构建模式为Debug（支持调试，你的原始配置，保留）
 set(CMAKE_BUILD_TYPE Debug)
