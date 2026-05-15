@@ -124,9 +124,9 @@ ragelmaker(http/httpclient_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/http)
 ragelmaker(src/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # 4. 包含头文件目录（你的原始配置，保留）
-include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 # 支持从仓库根目录的绝对 include 路径（如 include/foo.h、http/foo.h）
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # 5. 正确收集src目录下所有.cc文件（无语法错误）
 #file(GLOB_RECURSE SRC_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cc")
