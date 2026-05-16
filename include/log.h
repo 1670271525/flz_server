@@ -13,10 +13,12 @@
 #include <ostream>
 #include <fstream>
 #include <unordered_map>
-
+#include <set>
 #include "include/util.h"
 #include "include/singleton.h"
 #include "include/mutex.h"
+#include "env.h"
+
 
 #define FLZ_LOG_LEVEL(logger,level)\
 	if(logger->getLevel()<=level)\
@@ -109,6 +111,15 @@ namespace flz {
 		virtual void log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event) = 0;
 		void setFormatter(LogFormatter::ptr val);
 		LogFormatter::ptr getFormatter();
+		/**
+		 * @brief 获取日志级别
+		 */
+		LogLevel::Level getLevel() const { return m_level;}
+
+		/**
+		 * @brief 设置日志级别
+		 */
+    	void setLevel(LogLevel::Level val) { m_level = val;}
 	protected:
 		LogLevel::Level m_level = LogLevel::DEBUG;
 		LogFormatter::ptr m_formatter;

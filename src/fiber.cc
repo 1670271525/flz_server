@@ -7,7 +7,7 @@
 
 namespace flz {
 
-	static uint32_t const STACKSIZE = 32*128;
+	static uint32_t const STACKSIZE = 1024*128;
 
 	static std::atomic<uint64_t> s_fiber_id{0};
 	static std::atomic<uint64_t> s_fiber_count{0};
