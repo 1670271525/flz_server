@@ -404,8 +404,10 @@ namespace flz {
 	LoggerManager::LoggerManager(){
 		m_root.reset(new Logger);
 		m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
-		m_root->addAppender(LogAppender::ptr(new FileLogAppender("/home/fang/Desktop/CppProject/TcpServerProject01/Log/Log.txt")));
-		
+		//m_root->addAppender(LogAppender::ptr(new FileLogAppender("/home/fang/Desktop/CppProject/TcpServerProject01/Log/Log.txt")));
+		m_loggers[m_root->m_name] = m_root;
+
+    	init();
 	}
 	
 	Logger::ptr LoggerManager::getLogger(const std::string& name){
@@ -420,7 +422,9 @@ namespace flz {
 
 	}
 	
-	
+	void LoggerManager::init(){
+
+	}
 
 
 }

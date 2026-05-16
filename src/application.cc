@@ -20,7 +20,7 @@ static	flz::Logger::ptr g_logger = FLZ_LOG_NAME("system");
 
 static flz::ConfigVar<std::string>::ptr g_server_work_path =
     flz::Config::Lookup("server.work_path"
-            ,std::string("/apps/work/flz")
+            ,std::string("/home/fang/Desktop/work/flz")
             , "server work path");
 
 static flz::ConfigVar<std::string>::ptr g_server_pid_file =

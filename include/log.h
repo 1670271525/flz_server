@@ -167,10 +167,17 @@ namespace flz {
 		LoggerManager();
 		Logger::ptr getRoot() const{return m_root;}
 		Logger::ptr getLogger(const std::string& name);
+
+		void init();
+
+
 	private:
 		MutexType m_mutex;
 		std::unordered_map<std::string,Logger::ptr> m_loggers;
 		Logger::ptr m_root;
+
+
+
 	};
 
 	class LogEventWrap{
