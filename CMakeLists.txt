@@ -1,22 +1,4 @@
-#
-#
-#set(CMAKE_CXX_STANDARD 11)
-#
-#project(TcpServer)
-#
-#include_directories(${CMAKE_SOURCE_DIR}/include)
-#file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/src/*.cc")
-#list(REMOVE_ITEM SOURCES ${CMAKE_SOURCE_DIR}/src/test_threadpool.cc ${CMAKE_SOURCE_DIR}/src/test_tcp_server.cc)
-#
-#file(GLOB_RECURSE SOURCES "${CMAKE_SOURCE_DIR}/test/test_http.cc")
-#
-#set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/out)
-#
-#set(CMAKE_BUILD_TYPE Debug)
-#
-#
-#add_executable(TcpServer ${SOURCES})
-#
+
 
 # 1. （推荐添加）指定CMake最低版本要求，增强兼容性
 cmake_minimum_required(VERSION 3.10)
@@ -24,6 +6,8 @@ cmake_minimum_required(VERSION 3.10)
 project(TcpServer)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 include (cmake/utils.cmake)
 
@@ -40,10 +24,10 @@ if(Boost_FOUND)
     include_directories(${Boost_INCLUDE_DIRS})
 endif()
 
-#find_package(MySQL REQUIRED)
-#if(MYSQL_FOUND)
-	#include_directories(${MYSQL_INCLUDE_DIR})
-#endif()
+find_package(MySQL REQUIRED)
+if(MYSQL_FOUND)
+	include_directories(${MYSQL_INCLUDE_DIR})
+endif()
 
 find_package(Protobuf)
 if(Protobuf_FOUND)
@@ -111,6 +95,7 @@ set(LIB_SRC
 	http/ws_connection.cc
 	
 
+	db/mysql.cc
 
     
     # streams 目录下的源文件
@@ -123,24 +108,8 @@ ragelmaker(http/http11_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/http)
 ragelmaker(http/httpclient_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/http)
 ragelmaker(src/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# 4. 包含头文件目录（你的原始配置，保留）
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-# 支持从仓库根目录的绝对 include 路径（如 include/foo.h、http/foo.h）
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-
-# 5. 正确收集src目录下所有.cc文件（无语法错误）
-#file(GLOB_RECURSE SRC_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cc")
-
-#file(GLOB_RECURSE HTTP_SOURCES "${CMAKE_SOURCE_DIR}/http/*.cc")
-
-
-#file(GLOB_RECURSE STREAM_SOURCES "${CMAKE_SOURCE_DIR}/streams/*.cc")
-
-# 6. 正确收集test目录下所有.cc文件（单独定义变量，避免覆盖）
-#file(GLOB_RECURSE TEST_SOURCES "${CMAKE_SOURCE_DIR}/test/test_http_server.cc")
-
-# 7. 合并src和test的源文件到总变量（核心：避免覆盖，整合所有需要的.cc文件）
-#set(ALL_SOURCES ${SRC_SOURCES} ${HTTP_SOURCES}  ${TEST_SOURCES} ${STREAM_SOURCES})
 
 
 add_library(flz SHARED ${LIB_SRC})
@@ -154,6 +123,8 @@ set(LIBS
 		${ZLIB_LIBRARIES}
         ${OPENSSL_LIBRARIES}
         ${PROTOBUF_LIBRARIES}
+		mysqlclient
+
 	)
 
 
@@ -187,13 +158,14 @@ flz_add_executable(test_ws_server "test/test_ws_server.cc" flz "${LIBS}")
 
 flz_add_executable(test_socket "test/test_socket.cc" flz "${LIBS}")
 
+flz_add_executable(test_mysql "test/test_mysql.cc" flz "${LIBS}")
+
+
+
 flz_add_executable(bin_flz "src/main.cc" flz "${LIBS}")
 set_target_properties(bin_flz PROPERTIES OUTPUT_NAME "flz")
 
-#target_link_libraries(my_http_server tcmalloc)
 
-
-#target_link_libraries(test_http_server PRIVATE yaml-cpp)
 
 
 

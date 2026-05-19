@@ -110,8 +110,12 @@ namespace flz{
 		static int8_t ToChar(const char* str);
 		static int64_t Atoi(const char* str);
 		static double Atof(const char* str);
+
 	};
 
+
+	template<class T>
+	void nop(T*) {}
 
 }
 
