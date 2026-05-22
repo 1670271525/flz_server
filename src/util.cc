@@ -288,7 +288,7 @@ namespace flz{
 	bool File::OpenForWrite(std::ofstream& ofs,const std::string& filename,std::ios_base::openmode mode){
 		ofs.open(filename.c_str(),mode);
 		if(!ofs.is_open()){
-			create_direction(filename);
+			create_direction(path(filename));
 			ofs.open(filename.c_str(),mode);
 		}
 		return ofs.is_open();
