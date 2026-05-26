@@ -260,7 +260,7 @@ HttpResult::ptr HttpConnection::DoRequest(HttpRequest::ptr req
         return std::make_shared<HttpResult>((int)HttpResult::Error::INVALID_HOST
                 , nullptr, "invalid host: " + uri->getHost());
     }
-   	Socket::ptr sock = Socket::CreateTCP(addr);
+   	Socket::ptr sock = is_ssl ? SSLSocket::CreateTCP(addr) : Socket::CreateTCP(addr);
     if(!sock) {
         return std::make_shared<HttpResult>((int)HttpResult::Error::CREATE_SOCKET_ERROR
                 , nullptr, "create socket fail: " + addr->toString()
