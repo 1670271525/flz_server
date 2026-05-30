@@ -313,6 +313,37 @@ public:
     }
 };
 
+/**
+ * @brief 类型转换模板类片特化(YAML String 转换成 bool)
+ */
+ template<>
+ class LexicalCast<std::string, bool> {
+ public:
+     bool operator()(const std::string& v) {
+         std::string str = v;
+         // 统一转换为小写处理
+         std::transform(str.begin(), str.end(), str.begin(), ::tolower);
+         if(str == "1" || str == "true" || str == "yes" || str == "on") {
+             return true;
+         }
+         if(str == "0" || str == "false" || str == "no" || str == "off" || str.empty()) {
+             return false;
+         }
+         // 如果都不是，兜底交给 boost 处理
+         return boost::lexical_cast<bool>(v);
+     }
+ };
+ 
+ /**
+  * @brief 类型转换模板类片特化(bool 转换成 YAML String)
+  */
+ template<>
+ class LexicalCast<bool, std::string> {
+ public:
+     std::string operator()(const bool& v) {
+         return v ? "true" : "false";
+     }
+ };
 
 /**
  * @brief 配置参数模板子类,保存对应类型的参数值
