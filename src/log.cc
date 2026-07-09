@@ -298,11 +298,12 @@ namespace flz {
 	StdoutLogAppender::StdoutLogAppender(){
 	}
 
+	Mutex StdoutLogAppender::s_mutex;
+
 	void StdoutLogAppender::log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event){
 		if(level>=m_level){
-
+			MutexType::Lock lock(s_mutex);
 			m_formatter->format(std::cout,logger,level,event);
-			
 		}
 	}
 
@@ -312,6 +313,7 @@ namespace flz {
 
 	void FileLogAppender::log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event){
 		if(level>=m_level){
+			MutexType::Lock lock(m_mutex);
 			uint64_t now = event->getTime();
 			if(now >= (m_lastTime+3)){
 				reopen();

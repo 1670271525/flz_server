@@ -156,17 +156,22 @@ namespace flz {
 
 	class StdoutLogAppender:public LogAppender{
 	public:
+		typedef Mutex MutexType;
 		StdoutLogAppender();
 		void log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event);
+	private:
+		static MutexType s_mutex;
 	};
 
 	class FileLogAppender:public LogAppender{
 	public:
+		typedef Mutex MutexType;
 		FileLogAppender(const std::string& name);
 		void log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event)override;
 		bool reopen();
 		typedef std::shared_ptr<FileLogAppender> ptr;
 	private:
+		MutexType m_mutex;
 		uint64_t m_lastTime = 0;
 		std::string m_filename;
 		std::ofstream m_filestream;
